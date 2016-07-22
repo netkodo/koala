@@ -33,6 +33,7 @@ module Koala
     # See the Koala and Facebook documentation for more information.
     module GraphAPIMethods
 
+      attr_reader :headers
       # Objects
 
       # Get information about a Facebook object.
@@ -539,6 +540,7 @@ module Koala
         # enable appsecret_proof by default
         options = {:appsecret_proof => true}.merge(options) if @app_secret
         result = api(path, args, verb, options) do |response|
+          @headers = response.headers
           error = check_response(response.status, response.body, response.headers)
           raise error if error
         end
