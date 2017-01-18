@@ -537,8 +537,13 @@ module Koala
       #
       # @return the result from Facebook
       def graph_call(path, args = {}, verb = "get", options = {}, &post_processing)
-        # max 2 requests per second
-        sleep 0.5
+        # max 5 request per second for get requests
+        # max 1 request per second for other requests
+        if verb.downcase == 'get'
+          sleep 0.2
+        else
+          sleep 1
+        end
         # enable appsecret_proof by default
         options = {:appsecret_proof => true}.merge(options) if @app_secret
         result = api(path, args, verb, options) do |response|
